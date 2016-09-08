@@ -15,7 +15,6 @@
 @implementation TestLibrary
 
 - (BOOL)confirmLoad {
-  void *dlhandle = dlopen("Test.framework/Test", RTLD_LAZY | RTLD_LOCAL);
 
   if (![NSClassFromString(@"Test") working]) {
     NSLog(@"Not working yet.");
@@ -23,8 +22,6 @@
   }
 
   id tc = [[NSClassFromString(@"Test") alloc] init];
-
-  dlclose(dlhandle);
 
   return [tc objectsWorkingToo];
 }
