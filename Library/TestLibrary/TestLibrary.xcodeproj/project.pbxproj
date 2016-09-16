@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		92FBE90C1D8BCF1D004587E4 /* UniversalLib */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 92FBE90D1D8BCF1D004587E4 /* Build configuration list for PBXAggregateTarget "UniversalLib" */;
+			buildPhases = (
+				92FBE9101D8BCF33004587E4 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = UniversalLib;
+			productName = UniversalLib;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		9266FFD41D813EC50098F23E /* TestLibrary.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9266FFD31D813EC50098F23E /* TestLibrary.h */; };
 		9266FFD61D813EC50098F23E /* TestLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 9266FFD51D813EC50098F23E /* TestLibrary.m */; };
@@ -102,6 +116,9 @@
 					9266FFCF1D813EC50098F23E = {
 						CreatedOnToolsVersion = 7.3;
 					};
+					92FBE90C1D8BCF1D004587E4 = {
+						CreatedOnToolsVersion = 7.3;
+					};
 				};
 			};
 			buildConfigurationList = 9266FFCB1D813EC40098F23E /* Build configuration list for PBXProject "TestLibrary" */;
@@ -117,9 +134,26 @@
 			projectRoot = "";
 			targets = (
 				9266FFCF1D813EC50098F23E /* TestLibrary */,
+				92FBE90C1D8BCF1D004587E4 /* UniversalLib */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		92FBE9101D8BCF33004587E4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target ImageFilters ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target ImageFilters -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9266FFCC1D813EC50098F23E /* Sources */ = {
@@ -154,6 +188,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -198,6 +233,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -243,6 +279,20 @@
 			};
 			name = Release;
 		};
+		92FBE90E1D8BCF1D004587E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		92FBE90F1D8BCF1D004587E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -260,6 +310,15 @@
 			buildConfigurations = (
 				9266FFDA1D813EC50098F23E /* Debug */,
 				9266FFDB1D813EC50098F23E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		92FBE90D1D8BCF1D004587E4 /* Build configuration list for PBXAggregateTarget "UniversalLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92FBE90E1D8BCF1D004587E4 /* Debug */,
+				92FBE90F1D8BCF1D004587E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
